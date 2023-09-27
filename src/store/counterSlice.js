@@ -11,10 +11,11 @@ const counterSlice = createSlice({
     addCount(state, action){
       console.log('state', state);
       console.log('action', action);
-      state.count+=action.payload
+      // state.count+=action.payload
+      state.count+= action.payload.step
     },
     subCount(state, action){
-      state.count--
+      state.count-= action.payload.step
     },
   },
 });
