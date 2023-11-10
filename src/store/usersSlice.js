@@ -4,9 +4,9 @@ const USERS_SLICE_NAME = 'users';
 
 export const getUsers = createAsyncThunk(
   `${USERS_SLICE_NAME}/getUsers`,
-  async (params, thunkAPI) => {
+  async (params={res:5}, thunkAPI) => {
     const { dispatch } = thunkAPI;
-    const data = await fetch('https://randomuser.me/api/?results=5').then((response) => response.json());
+    const data = await fetch('https://randomuser.me/api/?results='+params.res).then((response) => response.json());
     dispatch(loadUsers(data.results));
   }
 );
