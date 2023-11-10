@@ -1,18 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
-import { addDays } from 'date-fns';
 
 const todoSlice = createSlice({
   name: 'todo',
   initialState: {
-    tasks: [
-      {
-        id: uuidv4(),
-        body: 'example body',
-        isDone: false,
-        deadLine: addDays(new Date(), 1),
-      },
-    ],
+    tasks: [],
     mode: 'all',
     amount: 5,
   },
