@@ -4,10 +4,15 @@ const USERS_SLICE_NAME = 'users';
 
 export const getUsers = createAsyncThunk(
   `${USERS_SLICE_NAME}/getUsers`,
-  async (params={res:5}, thunkAPI) => {
-    const { dispatch } = thunkAPI;
-    const data = await fetch('https://randomuser.me/api/?results='+params.res).then((response) => response.json());
-    dispatch(loadUsers(data.results));
+  async (params = { res: 5 }, thunkAPI) => {
+    try {
+      const data = await fetch(
+        'https://randomuser.me/api/?results=' + params.res
+      ).then((response) => response.json());
+      return data.results;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message)
+    }
   }
 );
 
@@ -18,14 +23,20 @@ const usersSlice = createSlice({
     error: null,
     isFetching: false,
   },
-  reducers: {
-    loadUsers(state, action) {
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getUsers.pending, (state, action) => {
+      state.isFetching = true;
+    });
+    builder.addCase(getUsers.fulfilled, (state, action) => {
+      state.isFetching = false;
       state.users = action.payload;
-    },
+    });
+    builder.addCase(getUsers.rejected, (state, action) => {
+      state.isFetching = false;
+      state.error = action.payload;
+    });
   },
-  extraReducers: {},
 });
-
-const { loadUsers } = usersSlice.actions;
 
 export default usersSlice.reducer;
